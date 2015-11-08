@@ -1,105 +1,146 @@
-#[Bayesian Methods for Hackers](http://camdavidsonpilon.github.io/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/)
-#### *Using Python and PyMC*
+#[베이지안 기법, 해커답게 알아보자](http://camdavidsonpilon.github.io/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/)
+#### *파이선과 PyMC 를 이용하여 알아보는 베이지안 방법론 학습*
 
 
-
-
-The Bayesian method is the natural approach to inference, yet it is hidden from readers behind chapters of slow, mathematical analysis. The typical text on Bayesian inference involves two to three chapters on probability theory, then enters what Bayesian inference is. Unfortunately, due to mathematical intractability of most Bayesian models, the reader is only shown simple, artificial examples. This can leave the user with a *so-what* feeling about Bayesian inference. In fact, this was the author's own prior opinion.
-
+베이지안 기법은 숨겨진 값을 알아내기 (inference) 위해 쓰기 좋은 기법입니다. 
+이 분석 방식을 이해하기 위해선 수학적으로 분석하는 능력이 필요한데요 
+그래서 사람들이 이런게 있다는 걸 잘 모르기도 하지요. 
+베이지안 추론을 다루는 서적을 보자면 일반적으로 두세 챕터 정도를 확률에 대해 가르친 다음 그제서야 베이지안 추론이 뭔지를 가르쳐줍니다. 
+근데 베이지안 모델은 그런 방식으로는 설명하기가 힘들어요. 그래서 별 도움 안되는 예제들이나 보여주기 마련입니다. 
+이렇게 배우게 되면 *그래서 뭐 어쩌라고* 싶습니다. 뭐 일단 저는 그렇게 생각했어요. 
 
 <div style="float: right; margin-left: 30px;"><img title="created by Stef Gibson at StefGibson.com"style="float: right;margin-left: 30px;" src="http://i.imgur.com/6DKYbPb.png?1" align=right height = 350 /></div>
 
-After some recent success of Bayesian methods in machine-learning competitions, I decided to investigate the subject again. Even with my mathematical background, it took me three straight-days of reading examples and trying to put the pieces together to understand the methods. There was simply not enough literature bridging theory to practice. The problem with my misunderstanding was the disconnect between Bayesian mathematics and probabilistic programming. That being said, I suffered then so the reader would not have to now. This book attempts to bridge the gap.
+최근 기계학습 기법 대회에서 베이지안 기법들이 꽤 결과가 좋더라구요. 
+그래서 전 해당 기법에 다시 한번 도전해보기로 했죠. 
+제가 수학을 좀 하거든요 그런데도 사흘 내내 예제들만 봤어요 그리고 어떻게든 그걸로 기법을 이해해보려고 했죠.
+이론을 가지고 어떻게 적용해야 할지 잘 설명해주고 있는 제대로 된 정보가 별로 없더라구요.
+베이지안 관련 수식들 (Bayesian mathematics) 와 확률 프로그래밍 (Probablistic programming) 들이 
+어떻게 연결되는지에 대해서 전 오해했었고 그 때문에 전 도통 이걸 어떻게 이해해야할지 몰랐죠.
+무슨 말이냐면, 제가 그 삽질을 한 덕분에 여러분들은 그럴 필요가 없을 것이다 이 말입니다. 
+전 그 부분을 이해하는데 도움이 되고자 해요.
 
-If Bayesian inference is the destination, then mathematical analysis is a particular path to towards it. On the other hand, computing power is cheap enough that we can afford to take an alternate route via probabilistic programming. The latter path is much more useful, as it denies the necessity of mathematical intervention at each step, that is, we remove often-intractable mathematical analysis as a prerequisite to Bayesian inference. Simply put, this latter computational path proceeds via small intermediate jumps from beginning to end, where as the first path proceeds by enormous leaps, often landing far away from our target. Furthermore, without a strong mathematical background, the analysis required by the first path cannot even take place.
+베이지안 기법을 공부하는 것이 우리의 목표라고 할 때, 수학적 분석은 그 목표를 얻는 수단이라 할 수 있습니다. 
+그런데, 굳이 수학적 분석 방식대로 공부하지 않고 우회해도 됩니다. 
+컴퓨터 자원이 남아도니까 확률 계산용 프로그래밍 (Probabilistic programming) 만 이해하고 그걸 통해서 이해할 수 있습니다.
+이게 훨씬 쓸때가 많아요. 왜냐면 수식을 일일히 이해할 필요가 없거든요. 
+즉, 우리는 골치아픈 수학적 분석기법들을 굳이 공부할 필요가 없습니다. 
+이렇게 공부했을 때 좋은 점이 뭐냐면 전체를 조금씩 나눠 하나씩 이해해갈 수 있습니다. 
+수식으로 베이지안 기법을 이해하고자 하면 전체를 한방에 이해하던가 아니면 이해못하던가 둘 중 하나에요. 
+보통은 영영 이해못하죠. 
+게다가 애초에 수학실력이 없으면 애초에 시작조차 못할 겁니다. 
 
-*Bayesian Methods for Hackers* is designed as an introduction to Bayesian inference from a computational/understanding-first, and mathematics-second, point of view. Of course as an introductory book, we can only leave it at that: an introductory book. For the mathematically trained, they may cure the curiosity this text generates with other texts designed with mathematical analysis in mind. For the enthusiast with less mathematical-background, or one who is not interested in the mathematics but simply the practice of Bayesian methods, this text should be sufficient and entertaining.
+*베이지안 기법, 해커답게 알아보자*는 베이지안 추론을 소개하는 문서가 되고자 합니다. 
+우선, 이해를 먼저하고, 그 다음에, 수식을 알아보는 방식으로 작성해봤습니다. 
+물론 입문서니까 깊게는 안들어갈거에요. 중요하니까 다시 말합니다. 이건 입문서에요. 
+수학 따윈 마스터해버린 사람이라면 수식을 통해서 이해하는 책들을 보면 됩니다. 
+수식으로 뭐 표현하는 거 싫어하는 사람이거나 수학에 별 관심없는 사람이라도 
+그냥 베이지안 기법을 공부하고 싶을 뿐인거라면 이런 방식만으로 충분할 거에요. 
+재밌기도 할 거구요.
 
-The choice of PyMC as the probabilistic programming language is two-fold. As of this writing, there is currently no central resource for examples and explanations in the PyMC universe. The official documentation assumes prior knowledge of Bayesian inference and probabilistic programming. We hope this book encourages users at every level to look at PyMC. Secondly, with recent core developments and popularity of the scientific stack in Python, PyMC is likely to become a core component soon enough.
+PyMC 를 가지고 프로그래밍할 겁니다. 그 이유는 두 개 정도지 않을까합니다. 
+일단은, PyMC 관련해서 딱히 좋은 예제들이나 설명이 없더라구요. 
+공식 문서를 보니 베이지안 추론이나 확률 계산용 프로그래밍에 대한 지식이 있어야 쓸 수 있도록 되어 있어요. 
+우리는 수학 지식과 상관없이 모든 사용자들이 PyMC 를 사용할 수 있도록 이 책이 도움이 되었으면 해요. 
+둘째로, 파이선 (Python) 가지고 만드는 수식 계산 프로그램 중에서 꽤 중요하거나 널리 쓰이는 것들을 보니 PyMC 를 꽤 많이 쓰더군요. 
 
-PyMC does have dependencies to run, namely NumPy and (optionally) SciPy. To not limit the user, the examples in this book will rely only on PyMC, NumPy, SciPy and Matplotlib only.
+PyMC 를 설치할려면 NumPy가 일단 필요하고, 경우에 한해서 SciPy가 필요해요. 
+그리고 이 책에 나오는 예제들은 PyMC, NumPy, Scipy, Matplotlib 정도면 돌아갈 수 있게 했습니다.
+그 정도면 환경을 구성하는데 문제 없을거에요. 
 
 
-
-
-Contents
+구성
 ------
 
-See the project homepage [here](http://camdavidsonpilon.github.io/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/) for examples, too.
+해당 프로젝트의 온라인 페이지를 [여기서](http://camdavidsonpilon.github.io/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/) 참조하세요. 예제들도 함께 있어요.
+
+이하의 챕터들은 *nbviewer*로 제공되며 
+[nbviewer.ipython.org/](http://nbviewer.ipython.org/) 에서 볼 수 있어요. 
+깃헙 클론을 하면 다운로드도 받을 수 있지요!
 
 
-The below chapters are rendered via the *nbviewer* at
-[nbviewer.ipython.org/](http://nbviewer.ipython.org/), and is read-only and rendered in real-time.
-Interactive notebooks + examples can be downloaded by cloning! 
+* [**서장:**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Prologue/Prologue.ipynb) 
+우리가 이 프로젝트를 하는 이유.
 
-
-* [**Prologue:**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Prologue/Prologue.ipynb) Why we do it.
-
-* [**Chapter 1: Introduction to Bayesian Methods**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter1_Introduction/Chapter1.ipynb)
-    Introduction to the philosophy and practice of Bayesian methods and answering the question, "What is probabilistic programming?" Examples include:
-    - Inferring human behaviour changes from text message rates
+* [**Chapter 1: 베이지안 기법을 소개합니다**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter1_Introduction/Chapter1.ipynb)
+    베이지안 통계의 철학과 베이지안 기법을 실사례를 소개합니다. "확률 프로그래밍이란 무엇인가"도 소개하구요. 
+    예제 : 
+    - 문자메세지 비율을 통해 인간의 행동변화을 추론하기
     
-* [**Chapter 2: A little more on PyMC**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter2_MorePyMC/Chapter2.ipynb)
-    We explore modeling Bayesian problems using Python's PyMC library through examples. How do we create Bayesian models? Examples include:
-    - Detecting the frequency of cheating students, while avoiding liars
-    - Calculating probabilities of the Challenger space-shuttle disaster
+* [**Chapter 2: PyMC 를 좀 더 알아보자**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter2_MorePyMC/Chapter2.ipynb)
+    여러 예제들을 통해 파이선과 PyMC를 이용하여 어떻게 베이지안 기법으로 모델을 만드는지를 알아봅니다.
+    어떻게하면 베이지안 모델을 만들 수 있을까요?
+    예제 : 
+    - 커닝하는 학생들이 얼마나 되는지 알아보기. 거짓말하는거까지 감안해서.
+    - 챌린지 우주왕복선 폭발 사고의 확률 계산하기
     
-* [**Chapter 3: Opening the Black Box of MCMC**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter3_MCMC/Chapter3.ipynb)
-    We discuss how MCMC operates and diagnostic tools. Examples include:
-    - Bayesian clustering with mixture models
+* [**Chapter 3: MCMC 까보기**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter3_MCMC/Chapter3.ipynb)
+    어떻게 MCMC 가 동작하는지에 대해 논의합니다.
+    예제 : 
+    - 여러 모델을 섞어서 베이지안 기법으로 클러스터링하기 (Bayesian clustering with mixture models)
     
-* [**Chapter 4: The Greatest Theorem Never Told**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter4_TheGreatestTheoremNeverTold/Chapter4.ipynb)
-    We explore an incredibly useful, and dangerous, theorem: The Law of Large Numbers. Examples include:
-    - Exploring a Kaggle dataset and the pitfalls of naive analysis
-    - How to sort Reddit comments from best to worst (not as easy as you think)
+* [**Chapter 4: 알려지지 않은 가장 위대한 정리**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter4_TheGreatestTheoremNeverTold/Chapter4.ipynb)
+    진짜 유용하고, 그리고 위험한, 정리: 다수의 법칙 (The Law of Large Numbers). 
+    예제 : 
+    - 카글 데이터셋을 알아보자. 그리고 나이브한 분석 (naive analysis) 의 위험성을 알아보자.
+    - 레딧에 달린 댓글을 반응이 가장 좋은거부터 가장 인기없는거까지 정렬해보자 (이거 생각보다 어렵다).
     
-* [**Chapter 5: Would you rather lose an arm or a leg?**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter5_LossFunctions/Chapter5.ipynb)
-    The introduction of loss functions and their (awesome) use in Bayesian methods.  Examples include:
-    - Solving the *Price is Right*'s Showdown
-    - Optimizing financial predictions
-    - Winning solution to the Kaggle Dark World's competition
+* [**Chapter 5: 팔 잘리기 vs 다리 잘리기 - 골라보시겠어요?**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter5_LossFunctions/Chapter5.ipynb)
+    평가하는 방법 (loss function) 에 대한 소개와 그게 얼마나 잘 베이지안 기법에서 쓰이는지 알아보기.
+    예제 : 
+    - 결전 *돈이 최고야* 를 풀어내는 법.
+    - 금융, 가장 정확하게 예측해보자.
+    - 카글 다크월드 대회 (the Kaggle Dark World's competition) 를 우승한 해법.
     
-* [**Chapter 6: Getting our *prior*-ities straight**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter6_Priorities/Chapter6.ipynb)
-    Probably the most important chapter. We draw on expert opinions to answer questions. Examples include:
-    - Multi-Armed Bandits and the Bayesian Bandit solution.
-    - What is the relationship between data sample size and prior?
-    - Estimating financial unknowns using expert priors
+* [**Chapter 6: *우선*순위 (*prior*-ities) 를 제대로 잡아보자**](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter6_Priorities/Chapter6.ipynb)
+    아마도 가장 중요한 챕터. 
+    여러 질문에 대해 전문가들의 의견을 들어보았습니다. 
+    - 손을 여러 개 가진 무장 강도 문제와 베이지안 무장 강도 문제의 해법.
+    - 데이터 샘플 개수와 우선값 (prior) 간의 관계는 무엇이 있을까?
+    - 전문가의 사전값을 사용하여 금융에서의 미지의 정보를 예측해내기
     
-    We explore useful tips to be objective in analysis as well as common pitfalls of priors. 
+    또한 분석할때 좀 더 객관적이 될 수 있는 유용한 정보들도 알아보자. 
+    사전값 (Prior) 의 문제도 함께 말이다. 
        
-* **Chapter X1: Bayesian methods in Machine Learning and Model Validation** 
-    We explore how to resolve the overfitting problem plus popular ML methods. Also included are probablistic explainations of ridge regression and LASSO regression.
-    - Tim Saliman's winning solution to Kaggle's *Don't Overfit* problem 
+* **Chapter X1: 머신러닝에서의 베이지안 기법과 모델 검증하기** 
+    데이터를 지나치게 사용하는 상황을 해결하는 방법에 대해서 알아봅시다. 
+    거기다가 유명한 머신러닝 기법도 알아볼 거에요. 
+    또한 릿지 리그레션과 라소 리그레션에 대해서도 알아볼 것입니다.
+    - 카글의 *Don't Overfit* 문제에 대한 팀 살리만의 우승 해법
     
 * **Chapter X2: More PyMC Hackery**
-    We explore the gritty details of PyMC. Examples include:
-    -  Analysis on real-time GitHub repo stars and forks.
+    PyMC 의 세부를 자세히 알아봅시다. 
+    예제 :
+    -  실시간 깃헙 저장소의 별표들과 포크에 대한 분석.
 
 
     
-**More questions about PyMC?**
-Please post your modeling, convergence, or any other PyMC question on [cross-validated](http://stats.stackexchange.com/), the statistics stack-exchange.
+**PyMC 에 대해 질문있나요?**
+여러분의 모델 방식, 학습 종료시 상황, 혹은 기타 질문들이 있으면 [cross-validated](http://stats.stackexchange.com/), the statistics stack-exchange 에 올려주세요.
     
     
-Using the book
+이 책을 사용하는 법
 -------
 
-The book can be read in three different ways, starting from most recommended to least recommended: 
+여러분은 이 책을 세 가지 서로 다른 방식으로 읽을 수 있습니다. 제가 가장 추천하는 방식부터 나열해볼께요:
 
-1. The most recommended option is to clone the repository to download the .ipynb files to your local machine. If you have IPython installed, you can view the 
-chapters in your browser *plus* edit and run the code provided (and try some practice questions). This is the preferred option to read
-this book, though it comes with some dependencies. 
+1. 제가 가장 추천하는 방법은 바로 지금 이 디렉토리를 클론하시는 겁니다. 그리고 .ipynb 파일들을 여러분의 컴퓨터로 다운받으세요. IPython 이 설치되어 있다면, 
+각각의 챕터들을 브라우저에서 직접 볼 수 있고 *거기다가* 내용 수정 및 코드 수정도 할 수 있습니다 (연습하면서 질문도 해보세요). 이게 제가 추천하는 방법입니다. 
+아래와 같은 조건을 갖추는게 약간 거추장스럽긴 하지만요.
+
     -  IPython v0.13 (or greater) is a requirement to view the ipynb files. It can be downloaded [here](http://ipython.org/). IPython notebooks can be run by `(your-virtualenv) ~/path/to/the/book/Chapter1_Introduction $ ipython notebook`
     -  For Linux users, you should not have a problem installing NumPy, SciPy, Matplotlib and PyMC. For Windows users, check out [pre-compiled versions](http://www.lfd.uci.edu/~gohlke/pythonlibs/) if you have difficulty. 
     -  In the styles/ directory are a number of files (.matplotlirc) that used to make things pretty. These are not only designed for the book, but they offer many improvements over the default settings of matplotlib.
-2. The second, preferred, option is to use the nbviewer.ipython.org site, which display IPython notebooks in the browser ([example](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter1_Introduction/Chapter1_Introduction.ipynb)).
-The contents are updated synchronously as commits are made to the book. You can use the Contents section above to link to the chapters.
+
+2. 두 번째로, nbviewer.ipython.org 사이트를 통해 보시길 추천합니다. 해당 사이트는 IPython notebooks 를 브라우저에서 볼 수 있는 기능을 제공합니다. ([example](http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter1_Introduction/Chapter1_Introduction.ipynb)).
+해당 책 내용에 커밋할 때마다 동기적으로 업데이트를 시키고 있어요. 위의 모든 챕터들에 있는 링크들을 타고가시면 됩니다.
  
-3. PDFs are the least-prefered method to read the book, as pdf's are static and non-interactive. If PDFs are desired, they can be created dynamically using the [nbconvert](https://github.com/ipython/nbconvert) utility.
+3. PDF 로 이 책을 읽을 수 있습니다. 제가 이걸 추천하지 않는 이유는 이거는 상호작용을 할 수 없거든요. 
+이 방식으로 책을 보시겠다면, [nbconvert](https://github.com/ipython/nbconvert) 을 통해 이용하시면 됩니다.
  
 
-Installation and configuration
-------
+설치 및 설정 방법
+----------------
 
 
 If you would like to run the IPython notebooks locally, (option 1. above), you'll need to install the following:
@@ -117,8 +158,8 @@ default settings of matplotlib and the IPython notebook. The in notebook style h
 
 
 
-Development
-------
+제작 방식
+--------
 
 This book has an unusual development design. The content is open-sourced, meaning anyone can be an author. 
 Authors submit content or revisions using the GitHub interface. 
@@ -141,9 +182,9 @@ feel free to start there.
 -  All commits are welcome, even if they are minor ;)
 -  If you are unfamiliar with Github, you can email me contributions to the email below.
 
-Reviews
-------
-*these are satirical, but real*
+리뷰
+-------
+*아래 리뷰들은 해학적입니다. 근데 진짜임*
 
 "No, but it looks good" - [John D. Cook](https://twitter.com/JohnDCook/status/359672133695184896)
 
@@ -154,11 +195,10 @@ The publishing model is so unusual. Not only is it open source but it relies on 
 
 
 
-Contributions and Thanks
------
+기여자분들 그리고 감사의 말
+---------------------------
 
-
-Thanks to all our contributing authors, including (in chronological order):
+아래의 모든 기여자 분들에게 감사드립니다 (시간 순으로 나열하였습니다).
 
 Authors | | | |
 --- | --- | --- | ---
@@ -187,7 +227,7 @@ community for developing the Notebook interface. All IPython notebook files are 
 
 
 
-####Contact
+#### 어떻게 연락하나요
 Contact the main author, Cam Davidson-Pilon at cam.davidson.pilon@gmail.com or [@cmrndp](https://twitter.com/cmrn_dp)
 
 
